@@ -1,4 +1,4 @@
-pragma solidity 0.4.20;
+pragma solidity 0.4.21;
 
 contract Casino {
    address public owner;
@@ -7,13 +7,21 @@ contract Casino {
    uint256 public numberOfBets;
    uint256 public maxAmountOfBets = 100;
    address[] public players;
+   
    struct Player {
       uint256 amountBet;
       uint256 numberSelected;
    }
+   
+   event Winner(
+        uint _number
+    );
+    
    // The address of the player and => the user info   
    mapping(address => Player) public playerInfo;
+   
    function() public payable {}
+   
    function Casino(uint256 _minimumBet) public {
       owner = msg.sender;
       if(_minimumBet != 0 ) minimumBet = _minimumBet;
@@ -61,6 +69,7 @@ contract Casino {
          if(winners[j] != address(0)) // Check that the address in this fixed array is not empty
          winners[j].transfer(winnerEtherAmount);
       }
+      emit Winner(numberWinner);
       resetData();
    }
    

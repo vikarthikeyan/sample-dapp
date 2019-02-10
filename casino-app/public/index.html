@@ -18,19 +18,19 @@
                   </div>
       <div className="block">
                      <b>Last number winner:</b> &nbsp;
-                     <span>{this.state.lastWinner}</span>
+                     <span id="last-number-winner"></span>
                   </div>
       <div className="block">
                      <b>Total ether bet:</b> &nbsp;
-                     <span>{this.state.totalBet} ether</span>
+                     <span id="total-bet-value"></span> &nbsp; ether
                   </div>
       <div className="block">
                      <b>Minimum bet:</b> &nbsp;
-                     <span>{this.state.minimumBet} ether</span>
+                     <span id="minimum-bet"></span> &nbsp; ether
                   </div>
       <div className="block">
                      <b>Max amount of bets:</b> &nbsp;
-                     <span>{this.state.maxAmountOfBets} ether</span>
+                     <span id="max-amount-bets"></span> &nbsp; ether
                   </div>
       <hr/>
       <h2>Vote for the next number</h2>
@@ -50,6 +50,8 @@
             <li value="9">9</li>
             <li value="10">10</li>
         </ul>
+      <hr/>
+      <button type="submit" id="generate-winner" class="btn btn-default">Generate Winner</button>
    </div>
    <!--<script src="build.js"></script>-->
    <script>
@@ -63,230 +65,243 @@
       web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
       }
       var MyContract = web3.eth.contract([
-         {
-            "constant": false,
-            "inputs": [
-               {
-                  "name": "numberSelected",
-                  "type": "uint256"
-               }
-            ],
-            "name": "bet",
-            "outputs": [],
-            "payable": true,
-            "stateMutability": "payable",
-            "type": "function"
-         },
-         {
-            "constant": false,
-            "inputs": [
-               {
-                  "name": "numberWinner",
-                  "type": "uint256"
-               }
-            ],
-            "name": "distributePrizes",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-         },
-         {
-            "constant": false,
-            "inputs": [],
-            "name": "generateNumberWinner",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-         },
-         {
-            "constant": false,
-            "inputs": [],
-            "name": "kill",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-         },
-         {
-            "constant": false,
-            "inputs": [],
-            "name": "resetData",
-            "outputs": [],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "function"
-         },
-         {
-            "inputs": [
-               {
-                  "name": "_minimumBet",
-                  "type": "uint256"
-               }
-            ],
-            "payable": false,
-            "stateMutability": "nonpayable",
-            "type": "constructor"
-         },
-         {
-            "payable": true,
-            "stateMutability": "payable",
-            "type": "fallback"
-         },
-         {
-            "constant": true,
-            "inputs": [
-               {
-                  "name": "player",
-                  "type": "address"
-               }
-            ],
-            "name": "checkPlayerExists",
-            "outputs": [
-               {
-                  "name": "",
-                  "type": "bool"
-               }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-         },
-         {
-            "constant": true,
-            "inputs": [],
-            "name": "maxAmountOfBets",
-            "outputs": [
-               {
-                  "name": "",
-                  "type": "uint256"
-               }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-         },
-         {
-            "constant": true,
-            "inputs": [],
-            "name": "minimumBet",
-            "outputs": [
-               {
-                  "name": "",
-                  "type": "uint256"
-               }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-         },
-         {
-            "constant": true,
-            "inputs": [],
-            "name": "numberOfBets",
-            "outputs": [
-               {
-                  "name": "",
-                  "type": "uint256"
-               }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-         },
-         {
-            "constant": true,
-            "inputs": [],
-            "name": "owner",
-            "outputs": [
-               {
-                  "name": "",
-                  "type": "address"
-               }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-         },
-         {
-            "constant": true,
-            "inputs": [
-               {
-                  "name": "",
-                  "type": "address"
-               }
-            ],
-            "name": "playerInfo",
-            "outputs": [
-               {
-                  "name": "amountBet",
-                  "type": "uint256"
-               },
-               {
-                  "name": "numberSelected",
-                  "type": "uint256"
-               }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-         },
-         {
-            "constant": true,
-            "inputs": [
-               {
-                  "name": "",
-                  "type": "uint256"
-               }
-            ],
-            "name": "players",
-            "outputs": [
-               {
-                  "name": "",
-                  "type": "address"
-               }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-         },
-         {
-            "constant": true,
-            "inputs": [],
-            "name": "totalBet",
-            "outputs": [
-               {
-                  "name": "",
-                  "type": "uint256"
-               }
-            ],
-            "payable": false,
-            "stateMutability": "view",
-            "type": "function"
-         }
-      ]);
-   var CasinoInstance = MyContract.at('0x32f264870085f2a1a93911069e77842ec53703dc');
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "generateNumberWinner",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "numberOfBets",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "player",
+				"type": "address"
+			}
+		],
+		"name": "checkPlayerExists",
+		"outputs": [
+			{
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "kill",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "resetData",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "playerInfo",
+		"outputs": [
+			{
+				"name": "amountBet",
+				"type": "uint256"
+			},
+			{
+				"name": "numberSelected",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "numberWinner",
+				"type": "uint256"
+			}
+		],
+		"name": "distributePrizes",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "numberSelected",
+				"type": "uint256"
+			}
+		],
+		"name": "bet",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "minimumBet",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "maxAmountOfBets",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "players",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "totalBet",
+		"outputs": [
+			{
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"name": "_minimumBet",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "fallback"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "_number",
+				"type": "uint256"
+			}
+		],
+		"name": "Winner",
+		"type": "event"
+	}
+]);
+   var CasinoInstance = MyContract.at('0xd5a02c2427396ffaf5b386c1b76359c8c79e36ff');
 
    refreshPageContent();
 
    function refreshPageContent() {
-      console.log("Calling trial");
+
       CasinoInstance.numberOfBets(function(err, result){
          $('#bet-count').text(result['c'][0]);
       });
 
       CasinoInstance.minimumBet(function(err, result){
-         console.log(result);
+         $('#minimum-bet').text(result['c'][0]);
       });
 
       CasinoInstance.totalBet(function(err, result){
-         console.log(result);
+         $('#total-bet-value').text(result['c'][0]);
       });
 
       CasinoInstance.maxAmountOfBets(function(err, result){
-         console.log(result);
+         $('#max-amount-bets').text(result['c'][0]);
       });
+
    }
 
    //For triggering the vote
@@ -303,8 +318,22 @@
                value: web3.toWei(ethers, 'ether')
             }, (err, result) => {
                console.log("bet placed");
+               refreshPageContent();
       });
    });
+
+   $("#generate-winner").click(function(){
+        CasinoInstance.generateNumberWinner(function(err, result){
+            var event = CasinoInstance.Winner();
+
+            // watch for changes
+            event.watch(function(error, result){
+               if (!error)
+                  console.log(result);
+                  alert(result['args']['_number']['c'][0]);
+            });
+         });
+    }); 
 
 </script>
 </body>
