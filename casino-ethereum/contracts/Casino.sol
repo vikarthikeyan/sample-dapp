@@ -2,7 +2,7 @@ pragma solidity 0.4.21;
 
 contract Casino {
    address public owner;
-   uint256 public minimumBet;
+   uint256 public minimumBet = 10000000000;
    uint256 public totalBet;
    uint256 public numberOfBets;
    uint256 public maxAmountOfBets = 100;
@@ -15,6 +15,10 @@ contract Casino {
    
    event Winner(
         uint _number
+    );
+    
+    event BetPlaced(
+        address _sender
     );
     
    // The address of the player and => the user info   
