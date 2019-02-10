@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+   <link rel="stylesheet" href="stylesheets/style.css">
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+   <title>Casino Ethereum Dapp</title>
+</head>
+<body>
+   <div id="root"></div>
+    <div className="main-container">
+                  <h1>Bet for your best number and win huge amounts of Ether</h1>
+               <div className="block">
+                     <b>Number of bets:</b> &nbsp;
+                     <span id="bet-count"></span>
+                  </div>
+      <div className="block">
+                     <b>Last number winner:</b> &nbsp;
+                     <span>{this.state.lastWinner}</span>
+                  </div>
+      <div className="block">
+                     <b>Total ether bet:</b> &nbsp;
+                     <span>{this.state.totalBet} ether</span>
+                  </div>
+      <div className="block">
+                     <b>Minimum bet:</b> &nbsp;
+                     <span>{this.state.minimumBet} ether</span>
+                  </div>
+      <div className="block">
+                     <b>Max amount of bets:</b> &nbsp;
+                     <span>{this.state.maxAmountOfBets} ether</span>
+                  </div>
+      <hr/>
+      <h2>Vote for the next number</h2>
+         <label>
+            <b>How much Ether do you want to bet? <input id="bet-value" className="bet-input" ref="ether-bet" type="number"/></b> ether
+            <br/>
+         </label>
+         <ul ref="numbers" id="num-list">
+            <li value="1">1</li>
+            <li value="2">2</li>
+            <li value="3">3</li>
+            <li value="4">4</li>
+            <li value="5">5</li>
+            <li value="6">6</li>
+            <li value="7">7</li>
+            <li value="8">8</li>
+            <li value="9">9</li>
+            <li value="10">10</li>
+        </ul>
+   </div>
+   <!--<script src="build.js"></script>-->
+   <script>
+      if (typeof web3 !== 'undefined') 
+      {
+      web3 = new Web3(web3.currentProvider);
+      } 
+      else 
+      {
+      // set the provider you want from Web3.providers
+      web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+      }
+      var MyContract = web3.eth.contract([
+         {
+            "constant": false,
+            "inputs": [
+               {
+                  "name": "numberSelected",
+                  "type": "uint256"
+               }
+            ],
+            "name": "bet",
+            "outputs": [],
+            "payable": true,
+            "stateMutability": "payable",
+            "type": "function"
+         },
+         {
+            "constant": false,
+            "inputs": [
+               {
+                  "name": "numberWinner",
+                  "type": "uint256"
+               }
+            ],
+            "name": "distributePrizes",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+         },
+         {
+            "constant": false,
+            "inputs": [],
+            "name": "generateNumberWinner",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+         },
+         {
+            "constant": false,
+            "inputs": [],
+            "name": "kill",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+         },
+         {
+            "constant": false,
+            "inputs": [],
+            "name": "resetData",
+            "outputs": [],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "function"
+         },
+         {
+            "inputs": [
+               {
+                  "name": "_minimumBet",
+                  "type": "uint256"
+               }
+            ],
+            "payable": false,
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+         },
+         {
+            "payable": true,
+            "stateMutability": "payable",
+            "type": "fallback"
+         },
+         {
+            "constant": true,
+            "inputs": [
+               {
+                  "name": "player",
+                  "type": "address"
+               }
+            ],
+            "name": "checkPlayerExists",
+            "outputs": [
+               {
+                  "name": "",
+                  "type": "bool"
+               }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+         },
+         {
+            "constant": true,
+            "inputs": [],
+            "name": "maxAmountOfBets",
+            "outputs": [
+               {
+                  "name": "",
+                  "type": "uint256"
+               }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+         },
+         {
+            "constant": true,
+            "inputs": [],
+            "name": "minimumBet",
+            "outputs": [
+               {
+                  "name": "",
+                  "type": "uint256"
+               }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+         },
+         {
+            "constant": true,
+            "inputs": [],
+            "name": "numberOfBets",
+            "outputs": [
+               {
+                  "name": "",
+                  "type": "uint256"
+               }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+         },
+         {
+            "constant": true,
+            "inputs": [],
+            "name": "owner",
+            "outputs": [
+               {
+                  "name": "",
+                  "type": "address"
+               }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+         },
+         {
+            "constant": true,
+            "inputs": [
+               {
+                  "name": "",
+                  "type": "address"
+               }
+            ],
+            "name": "playerInfo",
+            "outputs": [
+               {
+                  "name": "amountBet",
+                  "type": "uint256"
+               },
+               {
+                  "name": "numberSelected",
+                  "type": "uint256"
+               }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+         },
+         {
+            "constant": true,
+            "inputs": [
+               {
+                  "name": "",
+                  "type": "uint256"
+               }
+            ],
+            "name": "players",
+            "outputs": [
+               {
+                  "name": "",
+                  "type": "address"
+               }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+         },
+         {
+            "constant": true,
+            "inputs": [],
+            "name": "totalBet",
+            "outputs": [
+               {
+                  "name": "",
+                  "type": "uint256"
+               }
+            ],
+            "payable": false,
+            "stateMutability": "view",
+            "type": "function"
+         }
+      ]);
+   var CasinoInstance = MyContract.at('0x32f264870085f2a1a93911069e77842ec53703dc');
+
+   refreshPageContent();
+
+   function refreshPageContent() {
+      console.log("Calling trial");
+      CasinoInstance.numberOfBets(function(err, result){
+         $('#bet-count').text(result['c'][0]);
+      });
+
+      CasinoInstance.minimumBet(function(err, result){
+         console.log(result);
+      });
+
+      CasinoInstance.totalBet(function(err, result){
+         console.log(result);
+      });
+
+      CasinoInstance.maxAmountOfBets(function(err, result){
+         console.log(result);
+      });
+   }
+
+   //For triggering the vote
+   document.getElementById("num-list").addEventListener("click",function(e) {
+      console.log("button clicked");
+      console.log(e.target.value);
+      var vote = e.target.value;
+      var ethers = $("#bet-value").val();
+      console.log(ethers);
+
+      CasinoInstance.bet(vote, {
+               gas: 300000,
+               from: web3.eth.accounts[0],
+               value: web3.toWei(ethers, 'ether')
+            }, (err, result) => {
+               console.log("bet placed");
+      });
+   });
+
+</script>
+</body>
+</html>
