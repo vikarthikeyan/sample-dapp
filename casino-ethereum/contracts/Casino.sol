@@ -21,6 +21,10 @@ contract Casino {
         address _sender
     );
     
+    event Reset(
+        bool _resetStatus
+    );
+    
    // The address of the player and => the user info   
    mapping(address => Player) public playerInfo;
    
@@ -81,5 +85,6 @@ contract Casino {
    players.length = 0; // Delete all the players array
    totalBet = 0;
    numberOfBets = 0;
+   emit Reset(true);
     }
 }

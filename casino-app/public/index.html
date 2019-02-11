@@ -191,6 +191,18 @@
 		"type": "event"
 	},
 	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "_resetStatus",
+				"type": "bool"
+			}
+		],
+		"name": "Reset",
+		"type": "event"
+	},
+	{
 		"constant": true,
 		"inputs": [
 			{
@@ -322,7 +334,7 @@
 		"type": "function"
 	}
 ]);
-   var CasinoInstance = MyContract.at('0xa3478436b6241e5b39b770f052509ad7d1266a97');
+   var CasinoInstance = MyContract.at('0xdf83fc02156b7e2c603e2943326c859e3aaf21a7');
 
    refreshPageContent();
 
@@ -364,7 +376,6 @@
             }, (err, transactionHash) => {
                console.log("bet placed");
                console.log(transactionHash);
-               checkIf
                refreshPageContent();
       });
    });
@@ -375,7 +386,6 @@
 
             // watch for changes
             event.watch(function(error, result){
-               console.log(result);
                if (!error)
                   $('#winner-modal').modal('toggle');
                   $('#last-number-winner').text(result['args']['_number']['c'][0]);
@@ -386,8 +396,15 @@
     $("#reset-bids").click(function(){
         CasinoInstance.resetData(function(err, result){
            console.log(result);
+
+           var resetEvent = CasinoInstance.Reset();
+
+           resetEvent.watch(function(error, result) {
+              alert('Reset Successful');
          });
+      });
     });
+
 
 </script>
 </body>
