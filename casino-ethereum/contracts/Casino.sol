@@ -6,6 +6,7 @@ contract Casino {
    uint256 public totalBet;
    uint256 public numberOfBets;
    uint256 public maxAmountOfBets = 100;
+   uint256 public lastNumberWinner = 0;
    address[] public players;
    
    struct Player {
@@ -71,6 +72,7 @@ contract Casino {
    // Generates a number between 1 and 10 that will be the winner
    function generateNumberWinner() public {
       uint256 numberGenerated = block.number % 10 + 1; // This isn't secure
+      lastNumberWinner = numberGenerated;
       distributePrizes(numberGenerated);
    }
    // Sends the corresponding ether to each winner depending on the total bets
