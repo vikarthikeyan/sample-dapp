@@ -24,7 +24,7 @@
 <body>
    <div id="root"></div>
     <div className="main-container" style="padding-left:20px">
-                  <h1>Bet for your best number and win huge amounts of Ether</h1>
+                  <h1>Take your best bet and win huge amounts of ether!</h1>
                <div className="block">
                      <b>Number of bets:</b> &nbsp;
                      <span id="bet-count"></span>
@@ -334,7 +334,7 @@
 		"type": "function"
 	}
 ]);
-   var CasinoInstance = MyContract.at('0xdf83fc02156b7e2c603e2943326c859e3aaf21a7');
+   var CasinoInstance = MyContract.at('0x38f3d057d375e2411fc30583563292743e7657b0');
 
    refreshPageContent();
 
@@ -388,7 +388,8 @@
             event.watch(function(error, result){
                if (!error)
                   $('#winner-modal').modal('toggle');
-                  $('#last-number-winner').text(result['args']['_number']['c'][0]);
+                  refreshPageContent();
+                  $('#last-number-winner').text(result['args']['_number'].toNumber());
             });
          });
     }); 

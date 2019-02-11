@@ -45,15 +45,29 @@ contract Casino {
    }
    // To bet for a number between 1 and 10 both inclusive
    function bet(uint256 numberSelected) public payable {
-      require(!checkPlayerExists(msg.sender));
+      // Check that the max amount of bets hasn't been met yet
+      require(numberOfBets < maxAmountOfBets);
+      
+      // Check that the player doesn't exists
+      //require(!checkPlayerExists(msg.sender));
+      
+      // Check that the number to bet is within the range
       require(numberSelected >= 1 && numberSelected <= 10);
+      
+      // Check that the number to bet is within the range
       require(msg.value >= minimumBet);
+      
       playerInfo[msg.sender].amountBet = msg.value;
       playerInfo[msg.sender].numberSelected = numberSelected;
+      
       numberOfBets++;
+      
       players.push(msg.sender);
       totalBet += msg.value;
    }
+
+   
+
    // Generates a number between 1 and 10 that will be the winner
    function generateNumberWinner() public {
       uint256 numberGenerated = block.number % 10 + 1; // This isn't secure
