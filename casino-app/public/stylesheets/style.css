@@ -1,3 +1,8 @@
+h1,h3
+{
+color:blue !important;
+text-align:center;
+}
 body {
   font-family: 'open sans';
   margin: 0;
@@ -41,4 +46,22 @@ li:active{
  border: 1px solid lightgrey;
  font-size: 15pt;
  margin: 0 10px;
+}
+div
+{
+text-align:center;
+}
+.num {
+text-align:center;
+margin-left: 50px;
+}
+.num ul
+{
+display:inline-block;
+text-align:initial;
+}
+ul
+{
+padding-left:240px !important;
+
 }
