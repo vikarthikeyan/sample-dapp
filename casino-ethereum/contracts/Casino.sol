@@ -19,7 +19,8 @@ contract Casino {
     );
     
     event BetPlaced(
-        address _sender
+        uint _numberSelected;
+        uint _numberOfBets;
     );
     
     event Reset(
@@ -65,6 +66,7 @@ contract Casino {
       
       players.push(msg.sender);
       totalBet += msg.value;
+      emit BetPlaced(numberSelected, numberOfBets);
    }
 
    
