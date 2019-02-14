@@ -3,13 +3,13 @@
 <head>
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
+
    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-   
+
    <link rel="stylesheet" href="stylesheets/style.css">
-   
+
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-   
+
    <!-- Latest compiled and minified CSS -->
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -18,39 +18,40 @@
 
    <!-- Latest compiled and minified JavaScript -->
    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-   
+
    <title>Casino Ethereum Dapp</title>
 </head>
 <body>
-   <div id="root"></div>
-    <div className="main-container" style="padding-left:20px">
-                  <h1>Take your best bet and win huge amounts of ether!</h1>
+   <div id="root" align="center"></div>
+    <div className="main-container" style="padding-left:20px" text-align="center">
+                  <h1>Welcome to the UB Roulette</h1>
                <div className="block">
                      <b>Number of bets:</b> &nbsp;
                      <span id="bet-count"></span>
                   </div>
-      <div className="block">
+      <div className="block" text-align="center">
                      <b>Last number winner:</b> &nbsp;
                      <span id="last-number-winner"></span>
                   </div>
-      <div className="block">
+      <div className="block" text-align="center">
                      <b>Total ether bet:</b> &nbsp;
                      <span id="total-bet-value"></span> &nbsp; ether
                   </div>
-      <div className="block">
+      <div className="block" text-align="center">
                      <b>Minimum bet:</b> &nbsp;
                      <span id="minimum-bet"></span> &nbsp; ether
                   </div>
-      <div className="block">
+      <div className="block" text-align="center">
                      <b>Max amount of bets:</b> &nbsp;
                      <span id="max-amount-bets"></span> &nbsp; bets
                   </div>
       <hr/>
-      <h2>Vote for the next number</h2>
+      <h3>Let's bid for your favourite number</h3>
          <label>
-            <b>How much Ether do you want to bet? <input id="bet-value" className="bet-input" ref="ether-bet" type="number"/></b> ether
+            <b>How many Ether do you want to bet? <input id="bet-value" className="bet-input" ref="ether-bet" type="number"/></b> ether
             <br/>
          </label>
+<div id="num">
          <ul ref="numbers" id="num-list">
             <li value="1">1</li>
             <li value="2">2</li>
@@ -62,293 +63,246 @@
             <li value="8">8</li>
             <li value="9">9</li>
             <li value="10">10</li>
-        </ul>
-      <hr/>
-      <button type="submit" id="generate-winner" class="btn btn-primary align-center" data-toggle="modal" data-target="#winner-modal">Generate Winner</button>
-      <button type="submit" id="reset-bids" class="btn btn-danger align-center">Reset Bids</button>
+          </ul>
+</div>
+
+      <center><button type="submit" id="generate-winner" class="btn btn-primary align-center">Generate Winner</button></center>
+      <center><button type="submit" id="reset-bids" class="btn btn-danger align-center">Reset Bids</button></center>
+<center><canvas id="canvas" width="500" height="500"></canvas></center>
    </div>
    <!-- Modal -->
-   <div class="modal fade" id="winner-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-         <div class="modal-content">
-            <div class="modal-header">
-               <h5 class="modal-title" id="exampleModalLabel">Generating Winner</h5>
-            </div>
-            <div class="modal-body">
-               Please wait while your transaction is mined and executed!
-            </div>
-            <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-         </div>
-      </div>
-   </div>
-   <!--<script src="build.js"></script>-->
+      <!--<script src="build.js"></script>-->
    <script>
-      if (typeof web3 !== 'undefined') 
+      if (typeof web3 !== 'undefined')
       {
       web3 = new Web3(web3.currentProvider);
-      } 
-      else 
+      }
+      else
       {
       // set the provider you want from Web3.providers
       web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
       }
-      var MyContract = web3.eth.contract([
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "generateNumberWinner",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "numberOfBets",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "player",
-				"type": "address"
-			}
-		],
-		"name": "checkPlayerExists",
-		"outputs": [
-			{
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "kill",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "resetData",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "playerInfo",
-		"outputs": [
-			{
-				"name": "amountBet",
-				"type": "uint256"
-			},
-			{
-				"name": "numberSelected",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "numberWinner",
-				"type": "uint256"
-			}
-		],
-		"name": "distributePrizes",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "numberSelected",
-				"type": "uint256"
-			}
-		],
-		"name": "bet",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "lastNumberWinner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "minimumBet",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "maxAmountOfBets",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"name": "players",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "totalBet",
-		"outputs": [
-			{
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"name": "_minimumBet",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "fallback"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "_number",
-				"type": "uint256"
-			}
-		],
-		"name": "Winner",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "_sender",
-				"type": "address"
-			}
-		],
-		"name": "BetPlaced",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "_resetStatus",
-				"type": "bool"
-			}
-		],
-		"name": "Reset",
-		"type": "event"
-	}
-]);
-   var CasinoInstance = MyContract.at('0x15b9ae748ef0650ab2d29cc24c9ff17fd108cbd4');
+      var MyContract = web3.eth.contract(
+      [
+        	{
+        		"constant": false,
+        		"inputs": [
+        			{
+        				"name": "numberSelected",
+        				"type": "uint256"
+        			}
+        		],
+        		"name": "bet",
+        		"outputs": [],
+        		"payable": true,
+        		"stateMutability": "payable",
+        		"type": "function"
+        	},
+        	{
+        		"constant": false,
+        		"inputs": [
+        			{
+        				"name": "numberWinner",
+        				"type": "uint256"
+        			}
+        		],
+        		"name": "distributePrizes",
+        		"outputs": [],
+        		"payable": false,
+        		"stateMutability": "nonpayable",
+        		"type": "function"
+        	},
+        	{
+        		"constant": false,
+        		"inputs": [],
+        		"name": "generateNumberWinner",
+        		"outputs": [],
+        		"payable": false,
+        		"stateMutability": "nonpayable",
+        		"type": "function"
+        	},
+        	{
+        		"constant": false,
+        		"inputs": [],
+        		"name": "kill",
+        		"outputs": [],
+        		"payable": false,
+        		"stateMutability": "nonpayable",
+        		"type": "function"
+        	},
+        	{
+        		"constant": false,
+        		"inputs": [],
+        		"name": "resetData",
+        		"outputs": [],
+        		"payable": false,
+        		"stateMutability": "nonpayable",
+        		"type": "function"
+        	},
+        	{
+        		"inputs": [
+        			{
+        				"name": "_minimumBet",
+        				"type": "uint256"
+        			}
+        		],
+        		"payable": false,
+        		"stateMutability": "nonpayable",
+        		"type": "constructor"
+        	},
+        	{
+        		"payable": true,
+        		"stateMutability": "payable",
+        		"type": "fallback"
+        	},
+        	{
+        		"anonymous": false,
+        		"inputs": [
+        			{
+        				"indexed": false,
+        				"name": "_number",
+        				"type": "uint256"
+        			}
+        		],
+        		"name": "Winner",
+        		"type": "event"
+        	},
+        	{
+        		"constant": true,
+        		"inputs": [
+        			{
+        				"name": "player",
+        				"type": "address"
+        			}
+        		],
+        		"name": "checkPlayerExists",
+        		"outputs": [
+        			{
+        				"name": "",
+        				"type": "bool"
+        			}
+        		],
+        		"payable": false,
+        		"stateMutability": "view",
+        		"type": "function"
+        	},
+        	{
+        		"constant": true,
+        		"inputs": [],
+        		"name": "maxAmountOfBets",
+        		"outputs": [
+        			{
+        				"name": "",
+        				"type": "uint256"
+        			}
+        		],
+        		"payable": false,
+        		"stateMutability": "view",
+        		"type": "function"
+        	},
+        	{
+        		"constant": true,
+        		"inputs": [],
+        		"name": "minimumBet",
+        		"outputs": [
+        			{
+        				"name": "",
+        				"type": "uint256"
+        			}
+        		],
+        		"payable": false,
+        		"stateMutability": "view",
+        		"type": "function"
+        	},
+        	{
+        		"constant": true,
+        		"inputs": [],
+        		"name": "numberOfBets",
+        		"outputs": [
+        			{
+        				"name": "",
+        				"type": "uint256"
+        			}
+        		],
+        		"payable": false,
+        		"stateMutability": "view",
+        		"type": "function"
+        	},
+        	{
+        		"constant": true,
+        		"inputs": [],
+        		"name": "owner",
+        		"outputs": [
+        			{
+        				"name": "",
+        				"type": "address"
+        			}
+        		],
+        		"payable": false,
+        		"stateMutability": "view",
+        		"type": "function"
+        	},
+        	{
+        		"constant": true,
+        		"inputs": [
+        			{
+        				"name": "",
+        				"type": "address"
+        			}
+        		],
+        		"name": "playerInfo",
+        		"outputs": [
+        			{
+        				"name": "amountBet",
+        				"type": "uint256"
+        			},
+        			{
+        				"name": "numberSelected",
+        				"type": "uint256"
+        			}
+        		],
+        		"payable": false,
+        		"stateMutability": "view",
+        		"type": "function"
+        	},
+        	{
+        		"constant": true,
+        		"inputs": [
+        			{
+        				"name": "",
+        				"type": "uint256"
+        			}
+        		],
+        		"name": "players",
+        		"outputs": [
+        			{
+        				"name": "",
+        				"type": "address"
+        			}
+        		],
+        		"payable": false,
+        		"stateMutability": "view",
+        		"type": "function"
+        	},
+        	{
+        		"constant": true,
+        		"inputs": [],
+        		"name": "totalBet",
+        		"outputs": [
+        			{
+        				"name": "",
+        				"type": "uint256"
+        			}
+        		],
+        		"payable": false,
+        		"stateMutability": "view",
+        		"type": "function"
+        	}
+        ]
+
+
+);
+   var CasinoInstance = MyContract.at('0xc4ddf14c98ba97fa4f1bd0296c240764ceeb6052');
 
    refreshPageContent();
 
@@ -373,12 +327,126 @@
          $('#max-amount-bets').text(result.toNumber());
       });
 
-      CasinoInstance.lastNumberWinner(function(err, result){
-         $('#last-number-winner').text(result.toNumber());
-      });
 
    }
+var options = ["1", "2", "3", "4", "5","6","7","8","9","10"];
 
+var startAngle = 0;
+var arc = Math.PI / (options.length / 2);
+var spinTimeout = null;
+
+var spinArcStart = 10;
+var spinTime = 0;
+var spinTimeTotal = 0;
+
+var ctx;
+
+
+function byte2Hex(n) {
+  var nybHexString = "0123456789ABCDEF";
+  return String(nybHexString.substr((n >> 4) & 0x0F,1)) + nybHexString.substr(n & 0x0F,1);
+}
+
+function RGB2Color(r,g,b) {
+	return '#' + byte2Hex(r) + byte2Hex(g) + byte2Hex(b);
+}
+
+function getColor(item, maxitem) {
+  var phase = 0;
+  var center = 128;
+  var width = 127;
+  var frequency = Math.PI*2/maxitem;
+
+  red   = Math.sin(frequency*item+2+phase) * width + center;
+  green = Math.sin(frequency*item+0+phase) * width + center;
+  blue  = Math.sin(frequency*item+4+phase) * width + center;
+
+  return RGB2Color(red,green,blue);
+}
+
+function drawRouletteWheel() {
+  var canvas = document.getElementById("canvas");
+  if (canvas.getContext) {
+    var outsideRadius = 200;
+    var textRadius = 160;
+    var insideRadius = 125;
+
+    ctx = canvas.getContext("2d");
+    ctx.clearRect(0,0,500,500);
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+
+    ctx.font = 'bold 12px Helvetica, Arial';
+
+    for(var i = 0; i < options.length; i++) {
+      var angle = startAngle + i * arc;
+      //ctx.fillStyle = colors[i];
+      ctx.fillStyle = getColor(i, options.length);
+
+      ctx.beginPath();
+      ctx.arc(250, 250, outsideRadius, angle, angle + arc, false);
+      ctx.arc(250, 250, insideRadius, angle + arc, angle, true);
+      ctx.stroke();
+      ctx.fill();
+
+      ctx.save();
+      ctx.shadowOffsetX = -1;
+      ctx.shadowOffsetY = -1;
+      ctx.shadowBlur    = 0;
+      ctx.shadowColor   = "rgb(220,220,220)";
+      ctx.fillStyle = "black";
+      ctx.translate(250 + Math.cos(angle + arc / 2) * textRadius,
+                    250 + Math.sin(angle + arc / 2) * textRadius);
+      ctx.rotate(angle + arc / 2 + Math.PI / 2);
+      var text = options[i];
+      ctx.fillText(text, -ctx.measureText(text).width / 2, 0);
+      ctx.restore();
+    }
+
+    //Arrow
+
+  }
+}
+
+function spin() {
+  spinAngleStart = Math.random() * 10 + 10;
+  spinTime = 0;
+  spinTimeTotal = Math.random() * 3 + 4 * 1000;
+  rotateWheel();
+}
+
+function rotateWheel() {
+//  spinTime += 30;
+//  if(spinTime >= spinTimeTotal) {
+//    stopRotateWheel();
+//    return;
+//  }
+  var spinAngle = spinAngleStart - easeOut(spinTime, 0, spinAngleStart, spinTimeTotal);
+  startAngle += (spinAngle * Math.PI / 180);
+  drawRouletteWheel();
+  spinTimeout = setTimeout('rotateWheel()', 30);
+}
+
+function stopRotateWheel() {
+  clearTimeout(spinTimeout);
+  var degrees = startAngle * 180 / Math.PI + 90;
+  var arcd = arc * 180 / Math.PI;
+  var index = Math.floor((360 - degrees % 360) / arcd);
+  ctx.save();
+  ctx.font = 'bold 30px Helvetica, Arial';
+  var text = options[index]
+  ctx.fillText(text, 250 - ctx.measureText(text).width / 2, 250 + 10);
+  ctx.restore();
+}
+
+function easeOut(t, b, c, d) {
+  var ts = (t/=d)*t;
+  var tc = ts*t;
+  return b+c*(tc + -3*ts + 3*t);
+}
+
+drawRouletteWheel();
    //For triggering the vote
    document.getElementById("num-list").addEventListener("click",function(e) {
       console.log("button clicked");
@@ -399,18 +467,32 @@
    });
 
    $("#generate-winner").click(function(){
+        spin(); // starts spinning the wheel
         CasinoInstance.generateNumberWinner(function(err, result){
-            var event = CasinoInstance.Winner();
+        var event = CasinoInstance.Winner();
 
             // watch for changes
             event.watch(function(error, result){
+
                if (!error)
-                  $('#winner-modal').modal('toggle');
-                  refreshPageContent();
-                  //$('#last-number-winner').text(result['args']['_number'].toNumber());
+               {
+              //    $('#winner-modal').modal('toggle');
+			             clearTimeout(spinTimeout);
+                  var degrees = startAngle * 180 / Math.PI + 90;
+                  var arcd = arc * 180 / Math.PI;
+                  // var index = Math.floor((360 - degrees % 360) / arcd);
+                  ctx.save();
+                  ctx.font = 'bold 30px Helvetica, Arial';
+                  var text = result['args']['_number'].toNumber();
+                  ctx.fillText(text, 250 - ctx.measureText(text).width / 2, 250 + 10);
+                  ctx.restore();
+                  console.log(result['args']['_number'].toNumber());
+                }
+               //   refreshPageContent();
+                  $('#last-number-winner').text(result['args']['_number'].toNumber());
             });
          });
-    }); 
+    });
 
     $("#reset-bids").click(function(){
         CasinoInstance.resetData(function(err, result){
